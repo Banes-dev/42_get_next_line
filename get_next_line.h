@@ -6,7 +6,7 @@
 /*   By: ehay <ehay@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 13:51:09 by ehay              #+#    #+#             */
-/*   Updated: 2023/11/07 14:38:56 by ehay             ###   ########.fr       */
+/*   Updated: 2023/11/08 18:56:18 by ehay             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>          // fonction string
 # include <stdlib.h>          // malloc()
 # include <stddef.h>          // size_t
+# include <fcntl.h>           // open()
 # include <stdarg.h>          // fonction va_
 
 // prototype

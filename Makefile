@@ -1,8 +1,8 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror  -D BUFFER_SIZE=n
 
-NAME = libftget_count_next_line.a
+NAME = get_next_line.a
 
 FUNC =	get_next_line.c get_next_line_utils.c
 

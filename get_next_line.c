@@ -6,54 +6,73 @@
 /*   By: ehay <ehay@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 13:51:06 by ehay              #+#    #+#             */
-/*   Updated: 2023/11/08 22:01:48 by ehay             ###   ########.fr       */
+/*   Updated: 2023/11/09 16:12:00 by ehay             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	char *result;
-	char *buffer[BUFFER_SIZE];
-	int nbchar;
+	size_t	nbchar;
+	char	*buffer;
+	size_t	result;
+	size_t	i;
+	char	*lineresult;
 
-	nbchar = 0;
-    result = read(fd, &buffer, nbchar);
-	if (result == NULL)
+	lineresult = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+    if (lineresult == NULL)
+    {
+        return (NULL);
+    }
+	nbchar = BUFFER_SIZE;
+	buffer = (char *)malloc(sizeof(*buffer) * (BUFFER_SIZE + 1));
+	if (buffer == NULL)
+	{
+		free(lineresult);
+		return (NULL);
+	}
+	result = read(fd, buffer, nbchar);
+	if (result == (size_t) -1)
 	{
 		return (NULL);
 	}
 	else
 	{
-		int i;
-
 		i = 0;
-		while (result[i] != '\0')
+		buffer[result] = '\0';
+		while (buffer[i] != '\0' && i <= result)
 		{
-			if (result[i] == '\n')
+			while (buffer[i] != '\0' && i <= result)
 			{
-				// strjoin dans le newtruc result[i] donc seulement actuellement
+				if (buffer[i] == '\n')
+				{
+					lineresult[i] = '\0';
+					break;
+				}
+				
+				lineresult[i] = buffer[i];
+				// printf("%c\n", lineresult[i]);
+				i++;
 			}
-			i++;
 		}
-		// verif le result le placer dans le newtruc si pas == \n
 	}
+	free(buffer);
+	return (lineresult);
 }
-
 
 int main()
 {
 	char *nextlineresult;
-	int fd = open("test.txt", O_WRONLY | O_CREAT);
+	int fd = open("test.txt", O_RDWR);
     if (fd == -1) {
         perror("Erreur lors de l'ouverture du fichier");
         return 1;
     }
 
 	nextlineresult = get_next_line(fd);
-	printf("Result : %s", nextlineresult);
-    printf("test");
-
+	printf("%s\n", nextlineresult);
+	printf("\n---------------\n");
+	free(nextlineresult);
 	close(fd);
 }

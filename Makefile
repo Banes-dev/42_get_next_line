@@ -1,6 +1,6 @@
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror  -D BUFFER_SIZE=n
+CFLAGS = -Wall -Wextra -Werror  -D BUFFER_SIZE=42
 
 NAME = get_next_line.a
 

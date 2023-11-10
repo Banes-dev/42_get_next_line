@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ehay <ehay@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 13:51:06 by ehay              #+#    #+#             */
-/*   Updated: 2023/11/10 15:04:14 by ehay             ###   ########.fr       */
+/*   Updated: 2023/11/10 15:04:21 by ehay             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-static char	*clean_printed(char	*global_buffer)
+char	*clean_printed(char	*global_buffer)
 {
 	size_t	i;
 	char	*new;
@@ -38,7 +38,7 @@ static char	*clean_printed(char	*global_buffer)
 	return (new);
 }
 
-static char	*get_line(char *global_buffer)
+char	*get_line(char *global_buffer)
 {
 	size_t	len;
 	size_t	i;
@@ -62,7 +62,7 @@ static char	*get_line(char *global_buffer)
 	return (line);
 }
 
-static char	*join_n_free(char *global_buffer, char *local_buffer)
+char	*join_n_free(char *global_buffer, char *local_buffer)
 {
 	size_t	len_global;
 	size_t	len_local;
@@ -89,7 +89,7 @@ static char	*join_n_free(char *global_buffer, char *local_buffer)
 	return (appended);
 }
 
-static char	*read_buffsize(int fd, char *global_buffer)
+char	*read_buffsize(int fd, char *global_buffer)
 {
 	char	*buffer;
 	int		bytes_rd;
@@ -120,16 +120,16 @@ static char	*read_buffsize(int fd, char *global_buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*global_buffer;
+	static char	*global_buffer[FOPEN_MAX];
 	char		*line;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > FOPEN_MAX || BUFFER_SIZE <= 0)
 		return (NULL);
-	global_buffer = read_buffsize(fd, global_buffer);
-	if (!global_buffer)
+	global_buffer[fd] = read_buffsize(fd, global_buffer[fd]);
+	if (!global_buffer[fd])
 		return (NULL);
-	line = get_line(global_buffer);
-	global_buffer = clean_printed(global_buffer);
+	line = get_line(global_buffer[fd]);
+	global_buffer[fd] = clean_printed(global_buffer[fd]);
 	return (line);
 }
 
